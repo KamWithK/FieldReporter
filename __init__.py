@@ -50,5 +50,10 @@ def run_in_background():
     )
     operation.run_in_background()
 
-# Run on sync
+# Run on start
 gui_hooks.main_window_did_init.append(run_in_background)
+
+# Menu entry
+action = QAction("Reposition Cards", mw)
+qconnect(action.triggered, run_in_background)
+mw.form.menuTools.addAction(action)
