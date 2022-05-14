@@ -1,0 +1,6 @@
+{
+    "search_to_sort": "deck:Japanese is:new",
+    "sort_field": "Frequency",
+    "sort_reverse": false,
+    "shift_existing": true
+}
