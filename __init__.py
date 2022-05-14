@@ -1,5 +1,5 @@
 from aqt import mw
-from aqt.utils import showInfo, qconnect
+from aqt.utils import showInfo, qconnect, tr, tooltip
 from aqt.qt import QAction
 from aqt import gui_hooks
 from aqt import Collection
@@ -38,8 +38,12 @@ def reorder_cards(col: Collection) -> None:
     )
 
 def run_in_background():
-    operation = CollectionOp(parent=mw, op=reorder_cards)
+    operation = CollectionOp(parent=mw, op=reorder_cards).success(
+        lambda out: tooltip(
+            tr.browsing_changed_new_position(count=out.count), parent=mw
+        )
+    )
     operation.run_in_background()
 
 # Run on sync
-gui_hooks.sync_will_start.append(run_in_background)
+gui_hooks.main_window_did_init.append(run_in_background)
