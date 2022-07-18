@@ -1,6 +1,29 @@
 {
-    "search_to_sort": "deck:Japanese is:new",
-    "sort_field": "Frequency",
-    "sort_reverse": false,
-    "shift_existing": true
+    "add_frequencies": {
+        "frequency_list_path": "C:/Users/kamwi/Development/Projects/FieldReporter/term_meta_bank_1.json",
+        "word_field": "Word",
+        "reading_field": "Reading",
+        "frequency_field": "Frequency"
+    },
+    "field_sort": {
+        "search_to_sort": "deck:Japanese is:new",
+        "sort_field": "Frequency",
+        "sort_reverse": false
+    },
+    "field_to_tag": {
+        "source_field": "Source",
+        "prefixes": [
+        ],
+        "suffixes": [
+            " | ッツ Ebook Reader",
+            " | ッツ Ebook Reader",
+            " | mokuro",
+            "exSTATic | Visual Novels/",
+            "exSTATic | "
+        ],
+        "replacements": {
+            "かがみの孤城": "ライトノベル::かがみの孤城",
+            "ようこそ実力至上主義の教室へ (MF文庫J)": "ライトノベル::ようこそ実力至上主義の教室へ"
+        }
+    }
 }

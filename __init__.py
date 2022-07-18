@@ -1,59 +1,49 @@
 from aqt import mw
-from aqt.utils import showInfo, qconnect, tr, tooltip
+from aqt.utils import qconnect, tr, tooltip
 from aqt.qt import QAction
 from aqt import gui_hooks
 from aqt import Collection
 from aqt.operations import CollectionOp
 from anki.collection import OpChangesWithCount
+from .field_sort import reorder_cards
+from .field_to_tag import add_tags
+from .add_frequencies import populate_frequency
 
-config = mw.addonManager.getConfig(__name__)
-
-SEARCH_TO_SORT = config["search_to_sort"]
-SORT_FIELD = config["sort_field"]
-SORT_REVERSE = config["sort_reverse"]
-SHIFT_EXISTING = config["shift_existing"]
-
-def get_frequency(card):
+# Run in background logic
+def success_tooltip(out) -> tooltip:
     try:
-        field = card.note()[SORT_FIELD]
-        if field.strip() == "": return float("inf")
-        else: return int(field)
+        return tooltip(tr.browsing_changed_new_position(count=out.count), parent=mw)
     except:
-        return float("inf")
+        pass
 
-# Adds tags via the source field
-def reorder_cards(col: Collection) -> None:
-    # Get relevant cards
-    card_ids = mw.col.find_cards(SEARCH_TO_SORT, order="c.due asc")
-    cards = [mw.col.get_card(card_id) for card_id in card_ids]
+def run_in_background(func):
+    def handle_nones(func_input):
+        func_output = func(func_input)
 
-    # Sort cards
-    sorted_cards = sorted(cards, key=get_frequency, reverse=SORT_REVERSE)
-    sorted_card_ids = [card.id for card in sorted_cards]
-
-    # Avoid making unnecessary changes
-    if card_ids == sorted_card_ids:
-        return OpChangesWithCount(count=0)
+        if func_output == None:
+            return OpChangesWithCount(count=0)
+        else:
+            return func_output
     
-    # Reposition cards and apply changes
-    return mw.col.sched.reposition_new_cards(
-        card_ids=sorted_card_ids,
-        starting_from=0, step_size=1,
-        randomize=False, shift_existing=SHIFT_EXISTING
-    )
+    def run():
+        operation = CollectionOp(parent=mw, op=handle_nones).success(success_tooltip)
+        operation.run_in_background()
 
-def run_in_background():
-    operation = CollectionOp(parent=mw, op=reorder_cards).success(
-        lambda out: tooltip(
-            tr.browsing_changed_new_position(count=out.count), parent=mw if out.count != 0 else None
-        )
-    )
-    operation.run_in_background()
+    return run
 
-# Run on start
-gui_hooks.main_window_did_init.append(run_in_background)
+# Process cards on start
+gui_hooks.main_window_did_init.append(run_in_background(reorder_cards))
+gui_hooks.main_window_did_init.append(run_in_background(add_tags))
 
-# Menu entry
-action = QAction("Reposition Cards", mw)
-qconnect(action.triggered, run_in_background)
-mw.form.menuTools.addAction(action)
+# Menu entries for each action
+add_frequency_action = QAction("Add Missing Card Frequencies", mw)
+reorder_cards_action = QAction("Reorder Cards", mw)
+field_to_tags_action = QAction("Field to Tags", mw)
+
+qconnect(add_frequency_action.triggered, run_in_background(populate_frequency))
+qconnect(reorder_cards_action.triggered, run_in_background(reorder_cards))
+qconnect(field_to_tags_action.triggered, run_in_background(add_tags))
+
+mw.form.menuTools.addAction(add_frequency_action)
+mw.form.menuTools.addAction(reorder_cards_action)
+mw.form.menuTools.addAction(field_to_tags_action)
