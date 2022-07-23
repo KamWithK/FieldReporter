@@ -24,6 +24,9 @@ def get_frequency(card):
 
 # Adds tags via the source field
 def reorder_cards(col: Collection) -> None:
+    if "field_sort" not in mw.addonManager.getConfig(__name__):
+        return
+    
     update_config()
 
     # Get relevant cards

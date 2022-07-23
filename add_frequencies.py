@@ -1,3 +1,4 @@
+import os
 import json
 
 from aqt import mw
@@ -19,8 +20,11 @@ def update_config():
     FREQUENCY_FIELD = config["frequency_field"]
 
 # Example entry from JPDB frequency list
-with open(FREQUENCY_LIST_PATH, encoding="utf-8-sig") as file:
-    FREQUENCY_DATA = json.load(file)
+if os.path.exists(FREQUENCY_LIST_PATH):
+    with open(FREQUENCY_LIST_PATH, encoding="utf-8-sig") as file:
+        FREQUENCY_DATA = json.load(file)
+else:
+    FREQUENCY_DATA = None
 
 def is_same_kana(word: str, sample: str) -> bool:
     return word == sample
@@ -29,6 +33,9 @@ def is_same_word(word: str, word_reading: str, sample: str, sample_reading: str)
     return word == sample and word_reading == sample_reading
 
 def populate_frequency(col: Collection) -> None:
+    if "add_frequencies" not in mw.addonManager.getConfig(__name__) or FREQUENCY_DATA == None:
+        return
+    
     update_config()
     
     # Get tags without frequency

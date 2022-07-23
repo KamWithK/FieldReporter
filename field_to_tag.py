@@ -45,6 +45,9 @@ def apply_replacements(original: str) -> str:
 
 # Adds tags via the source field
 def add_tags(col: Collection) -> None:
+    if "field_to_tag" not in mw.addonManager.getConfig(__name__):
+        return
+    
     update_config()
 
     # Get untagged notes with the source field not-empty

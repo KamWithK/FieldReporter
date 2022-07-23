@@ -1,3 +1,7 @@
+## General Notes
+* To disable one function off this addon remove the config group (for example remove "add_frequencies" if you don't want to add the option to prefill frequencies)
+* Config won't work with default options, make sure to look at it and change things for your card types
+
 ## Auto Sort Cards based on Field
 * `search_to_sort` - a search query for the cards to update, these will start at position 0
 * `sort_field` - the note field to sort by
@@ -20,3 +24,5 @@
 * `word_field` - the field on card with each word
 * `reading_field` - the field on card with each words reading
 * `frequency_field` - the field on card where frequencies should be inserted
+
+**NOTE**: This won't do anything if the frequency list path isn't valid
