@@ -13,17 +13,25 @@
     "field_to_tag": {
         "source_field": "Source",
         "prefixes": [
+            "exSTATic | Visual Novels/",
+            "exSTATic | "
         ],
         "suffixes": [
             " | ッツ Ebook Reader",
             " | ッツ Ebook Reader",
-            " | mokuro",
-            "exSTATic | Visual Novels/",
-            "exSTATic | "
+            " | mokuro"
         ],
         "replacements": {
+            "Attack on Titan v05 (2011) (Digital SD) (KG Manga)": "漫画::進撃の巨人",
+            "FLOWERS": "ビジュアルノベル::FLOWERS",
+            "Unnamed Memory I 青き月の魔女と呪われし王": "ライトノベル::Unnamed⠀Memory",
+            "Unnamed Memory I　青き月の魔女と呪われし王": "ライトノベル::Unnamed⠀Memory",
+            "【一般コミック】 高橋和希 「遊戯王 第01巻」": "漫画::遊戯王",
             "かがみの孤城": "ライトノベル::かがみの孤城",
-            "ようこそ実力至上主義の教室へ (MF文庫J)": "ライトノベル::ようこそ実力至上主義の教室へ"
+            "ようこそ実力至上主義の教室へ (MF文庫J)": "ライトノベル::ようこそ実力至上主義の教室へ",
+            "デルトラ・クエスト (1) 沈黙の森": "ライトノベル::デルトラ・クエスト",
+            "君と彼女と彼女の恋。/totono.exe": "ビジュアルノベル::君と彼女と彼女の恋",
+            "白昼夢の青写真/cs2.exe": "ビジュアルノベル::白昼夢の青写真"
         }
     }
 }
