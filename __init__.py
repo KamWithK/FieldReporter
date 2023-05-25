@@ -31,9 +31,20 @@ def run_in_background(func):
 
     return run
 
-# Process cards on start
-gui_hooks.main_window_did_init.append(run_in_background(reorder_cards))
-gui_hooks.main_window_did_init.append(run_in_background(add_tags))
+
+def run_in_foreground(func):
+    def run():
+        func_output = func(mw.col)
+        if func_output != None:
+            success_tooltip(func_output)
+
+    return run
+
+
+# Process cards on sync
+gui_hooks.sync_will_start.append(run_in_foreground(reorder_cards))
+gui_hooks.sync_did_finish.append(run_in_background(reorder_cards))
+gui_hooks.sync_did_finish.append(run_in_background(add_tags))
 
 # Menu entries for each action
 add_frequency_action = QAction("Add Missing Card Frequencies", mw)
